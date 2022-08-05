@@ -1,1 +1,1 @@
-食用指南在 apis/database-account-default.php 里。
+食用指南在 apis/lib/database-account-default.php 里。
