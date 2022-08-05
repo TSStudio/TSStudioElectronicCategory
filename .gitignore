@@ -1,3 +1,4 @@
 old/db.php
 apis/lib/db.php
 apis/lib/database-account.php
+frontend/node_modules

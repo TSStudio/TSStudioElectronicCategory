@@ -78,7 +78,9 @@ $selfId=$data['selfId'];
 $value=$data['value'];
 $barcode=$data['barcode'];
 // if any is empty
-if(empty($category)||empty($remaining)||empty($name)||empty($selfId)||empty($value)||empty($barcode)){
+if(strlen($selfId)==0){$selfId="0";}
+if(strlen($barcode)==0){$barcode="0";}
+if(empty($category)||strlen($name)==0||strlen($selfId)==0||strlen($barcode)==0){
     $api->throw_error(TAPI_ERR_INVALID_INPUT,"Invalid parameters");
 }
 // prevent sql injection

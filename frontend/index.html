@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <title>Repo</title>
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" href="dist/style.min.css">
+    </head>
+    <body>
+        <div id="window"></div>
+        <div id="loading-bar"> </div>
+        <div id="cover"></div>
+        <div id="header">
+            <div id="maintitle">仓库</div>
+            <div id="topButtonSet">
+                <a class="topButton" onclick="openCategoryManager()"><i class="iconfont mid-icon">&#xe950;</i> 类别管理器</a>
+                <a class="topButton" onclick="openHistory()"><i class="iconfont mid-icon">&#xe642;</i> 变动记录</a>
+            </div>
+        </div>
+        <div id="categories">
+            <a class="category category-selected">全部</a>
+        </div>
+        <div id="selectPointer">▲</div>
+        <div id="decorationBar"> </div>
+        <div id="cardContainer">
+        </div>
+    </body>
+    <script src="dist/bundle.js"></script>
+</html>

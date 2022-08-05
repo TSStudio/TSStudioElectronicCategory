@@ -1,0 +1,1 @@
+食用指南在 apis/database-account-default.php 里。

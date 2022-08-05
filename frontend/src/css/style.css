@@ -1,7 +1,6 @@
 @font-face {
     font-family: 'iconfont';  /* project id 3377228 */
-    src: url('');
-    src: url('?#iefix') format('embedded-opentype'),
+    src:
     url('https://at.alicdn.com/t/font_3377228_4xl4aw52vke.woff2') format('woff2'),
     url('https://at.alicdn.com/t/font_3377228_4xl4aw52vke.woff') format('woff'),
     url('https://at.alicdn.com/t/font_3377228_4xl4aw52vke.ttf') format('truetype'),
@@ -36,7 +35,7 @@ html,body{
     overflow: auto;
 }
 #wtitle{
-    padding:10px;
+    padding:0;
     display:flex;
 }
 #wtitle-left{
@@ -183,6 +182,7 @@ html,body{
     margin-bottom:30px;
 }
 .card{
+    overflow: auto;
     box-sizing: border-box;
     color:#3D3D3D;
     background-color: #D8D8D8;
@@ -221,7 +221,8 @@ html,body{
     color:#9C9C9C;
 }
 .selectedPage{
-    color:#3D3D3D;
+    color:#586bcd;
+    cursor:default;
 }
 .attribute{
     color:#3D3D3D;
@@ -279,9 +280,24 @@ select{
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.2s ease-in-out;
+    text-decoration: none;
+}
+.danger{
+    background-color: #FF5A5A;
+    color:#FFFFFF;
+}
+.safe{
+    background-color: #4fffad;
+    color:#FFFFFF;
 }
 .SmallButton:hover{
     background-color: #9C9C9C;
+}
+.danger:hover{
+    background-color: #DD4343;
+}
+.safe:hover{
+    background-color: #3cdd9a;
 }
 .inline-input{
     box-sizing: border-box;

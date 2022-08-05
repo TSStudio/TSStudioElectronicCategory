@@ -91,9 +91,9 @@ if($category!=-1){
 // get total number of items
 // if category is -1, then all categories
 if($category==-1){
-    $sql="SELECT COUNT(*) FROM list2";
+    $sql="SELECT COUNT(*) FROM list2 WHERE user='$uid'";
 }else{
-    $sql="SELECT COUNT(*) FROM list2 WHERE category=$category";
+    $sql="SELECT COUNT(*) FROM list2 WHERE category=$category AND user='$uid'";
 }
 $result=$conn->query($sql);
 $row=$result->fetch_row();
@@ -117,9 +117,9 @@ $start=($page-1)*$perPage;
 $end=$start+$perPage;
 // get items
 if($category==-1){
-    $sql="SELECT * FROM list2 ORDER BY $sortingby $sorting LIMIT $start,$end";
+    $sql="SELECT * FROM list2 WHERE user='$uid' ORDER BY $sortingby $sorting LIMIT $start,$end";
 }else{
-    $sql="SELECT * FROM list2 WHERE category=$category ORDER BY $sortingby $sorting LIMIT $start,$end";
+    $sql="SELECT * FROM list2 WHERE user='$uid' AND category=$category ORDER BY $sortingby $sorting LIMIT $start,$end";
 }
 $result=$conn->query($sql);
 $items=array();

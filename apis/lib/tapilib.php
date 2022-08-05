@@ -9,7 +9,6 @@ define('TAPI_ERR_INVALID_INPUT',3);
 define('TAPI_ERR_MISSING_PARAM',4);
 define('TAPI_ERR_INTERNAL',5);
 define('TAPI_ERR_OTHER',6);
-
 class Tapi{
     public function get_request(){
         //get raw request json data
@@ -22,10 +21,11 @@ class Tapi{
         return $data;
     }
     public function throw_error($error,$errmsg){
+        $TAPI_ERR_LIST=["TAPI_SUCCESS","TAPI_ERR_NOT_LOGGED_IN","TAPI_ERR_RESTRICTED","TAPI_ERR_INVALID_INPUT","TAPI_ERR_MISSING_PARAM","TAPI_ERR_INTERNAL","TAPI_ERR_OTHER"];
         header('Content-Type: application/json');
         $data=array(
             'error'=>$error,
-            'errmsg'=>$errmsg
+            'errmsg'=>$TAPI_ERR_LIST[$error]." : ".$errmsg
         );
         echo json_encode($data);
         exit;

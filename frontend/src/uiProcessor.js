@@ -1,12 +1,12 @@
 var isLoadingBarVisible = false;
 var timeoutID=0;
-function setLoadingBar(percentage,error=0){
+window.setLoadingBar=function(percentage,error=0){
     if(error){
         isLoadingBarVisible = true;
         try{window.clearTimeout(timeoutID);}catch(e){}
         document.getElementById("loading-bar").style.height = "5px";
         document.getElementById("loading-bar").style.width = "100%";
-        document.getElementById("loading-bar").style.backgroundColor = "#CC2222";
+        document.getElementById("loading-bar").style.backgroundColor = "#FF5A5A";
         return;
     }
     document.getElementById("loading-bar").style.backgroundColor = "#3dc8ff";
@@ -23,17 +23,18 @@ function setLoadingBar(percentage,error=0){
     //edit width style of id loading-bar
     document.getElementById("loading-bar").style.width = percentage + "%";
 }
-var currentCategory=0;
-var categories=["全部"];
-var categoryid_to_thisId=[];
-var category_ids=["-1"];
-function buildCategoryIndex(){
+window.currentCategory=0;
+window.categories=["全部"];
+window.categoryid_to_thisId=[];
+window.category_ids=["-1"];
+window.buildCategoryIndex=function(){
     categoryid_to_thisId=[];
     for(let i=0;i<categories.length;i++){
         categoryid_to_thisId[category_ids[i]]=categories[i];
     }
 }
-function getPosition(node){
+
+window.getPosition=function(node){
     var left=node.offsetLeft; 
     current=node.offsetParent; 
     while(current!=null){
@@ -42,7 +43,7 @@ function getPosition(node){
     }
     return left;
 }
-function refreshCategories(){
+window.refreshCategories=function(){
     box=document.getElementById("categories");
     innerHTML="";
     for(var i=0;i<categories.length;i++){
@@ -58,30 +59,24 @@ function refreshCategories(){
     selectPointer=document.getElementById("selectPointer");
     selectPointer.style.paddingLeft=(getPosition(selected)+selected.clientWidth/2-8)+"px";
 }
-function selectCategory(arg){
+window.selectCategory=function(arg){
     currentCategory=arg;
     refreshCategories();
     getpage(1);
 }
-
 window.onload=function(){
     getCategories();
-    getpage(1);
 }
-function openCategoryManager(){
-    document.getElementById("cover").style.display="block";
-    windowO=document.getElementById("window");
-    windowO.style.display="block";
+window.openCategoryManager=function(){
+    windowO=openWindow();
     windowO.innerHTML='<div id="wtitle"><div id="wtitle-left">类别管理器</div><div id="wtitle-right"><i class="iconfont mid-icon closer" onclick="closeWindow()">&#xe670;</i></div></div><div id="managerCategoryContainer"></div><div id="new"><input type="text" id="newCategoryInput" class="newCategoryName"/><a class="SmallButton" onclick="preNewCategory()"><i class="iconfont small-icon">&#xe845;</i></a></div>';
     getDetailedCategories()
 }
-function newPart(){
-    document.getElementById("cover").style.display="block";
-    windowO=document.getElementById("window");
-    windowO.style.display="block";
+window.newPart=function(){
+    windowO=openWindow();
     windowO.innerHTML='<div id="wtitle"><div id="wtitle-left">新零件</div><div id="wtitle-right"><i class="iconfont mid-icon closer" onclick="closeWindow()">&#xe670;</i></div></div><div id="newpartline1"><div class="inputZone">类别<br><input type="text" value="'+categories[currentCategory]+'" class="inline-input" disabled></div><div class="inputZone">库存<br><input type="number" class="inline-input" id="remaining" value="0"></div><div class="inputZone">值<br><input type="text" class="inline-input" id="value" value="0"></div></div><div id="newpartline2t4"><div class="inputZoneL">名称<br><input type="text" class="inline-input" id="name"></div><div class="inputZoneL">自有编号<br><input type="text" class="inline-input" id="selfId"></div><div class="inputZoneL">条码<br><input type="text" class="inline-input" id="barcode"></div></div><a class="SmallButton" onclick="preNewPart()"><i class="iconfont small-icon">&#xe845;</i></a>';
 }
-function preNewPart(){
+window.preNewPart=function(){
     category=category_ids[currentCategory];
     remaining=document.getElementById("remaining").value;
     nicname=document.getElementById("name").value;
@@ -102,21 +97,28 @@ function preNewPart(){
     AJAXPostRequest("apis/newPart.php",jsonstr,closeWindow);
     getpage(curpage);
 }
-function openHistory(){
-    document.getElementById("cover").style.display="block";
-    windowO=document.getElementById("window");
-    windowO.style.display="block";
+window.openHistory=function(){
+    windowO=openWindow();
     windowO.innerHTML='<div id="wtitle"><div id="wtitle-left">记录(最近50条)</div><div id="wtitle-right"><i class="iconfont mid-icon closer" onclick="closeWindow()">&#xe670;</i></div></div><div id="logContainer"></div>';
     getLog();
 }
-function closeWindow(param=0){
+window.openWindow=function(){
+    document.getElementById("cover").style.display="block";
+    windowO=document.getElementById("window");
+    windowO.style.display="block";
+    document.documentElement.style.overflow="hidden";
+    document.body.scrollTop=document.documentElement.scrollTop=0;
+    return windowO;
+}
+window.closeWindow=function(param=0){
+    document.documentElement.style.overflow="auto";
     document.getElementById("cover").style.display="none";
     document.getElementById("window").style.display="none";
 }
-var curpage=1;
-var sortingby=0;
-var sorting="ASC";
-function getpage(page){
+window.curpage=1;
+window.sortingby=0;
+window.sorting="ASC";
+window.getpage=function(page){
     curpage=page;
     category=category_ids[currentCategory];
     //to json
@@ -130,7 +132,8 @@ function getpage(page){
     //send to server
     AJAXPostRequest("apis/getPage.php",jsonstr,getpagestg2);
 }
-function getpagestg2(json_data){
+window.categories_pid=[]
+window.getpagestg2=function(json_data){
     json_decoded=JSON.parse(json_data);
     curPage=json_decoded.page;
     totalPage=json_decoded.totalPage;
@@ -160,6 +163,7 @@ function getpagestg2(json_data){
     for(i=0;i<json_decoded.items.length;i++){
         PartID=json_decoded.items[i].pid;
         catego=categoryid_to_thisId[json_decoded.items[i].category];
+        categories_pid[PartID]=catego;
         remaining=json_decoded.items[i].remaining;
         namenick=json_decoded.items[i].name;
         selfId=json_decoded.items[i].selfId;
@@ -169,26 +173,58 @@ function getpagestg2(json_data){
     document.getElementById("cardContainer").innerHTML=contentHTML;
     refreshSortingIcon();
 }
-function modifyPart(pid){
-
+window.modifyPart=function(pid){
+    windowO=openWindow();
+    windowO.innerHTML='<div id="wtitle"><div id="wtitle-left">修改零件 #'+pid.toString()+'</div><div id="wtitle-right"><i class="iconfont mid-icon closer" onclick="closeWindow()">&#xe670;</i></div></div><div id="newpartline1"><div class="inputZone">类别<br><input type="text" value="'+categories_pid[pid.toString()]+'" class="inline-input" disabled></div><div class="inputZone">库存<br><input type="number" class="inline-input" id="remaining" value="0"></div><div class="inputZone">值<br><input type="text" class="inline-input" id="value" value="0"></div></div><div id="newpartline2t4"><div class="inputZoneL">名称<br><input type="text" class="inline-input" id="name"></div><div class="inputZoneL">自有编号<br><input type="text" class="inline-input" id="selfId"></div><div class="inputZoneL">条码<br><input type="text" class="inline-input" id="barcode"></div></div><a class="SmallButton safe" onclick="preModifyPart('+pid.toString()+')"><i class="iconfont small-icon">&#xe7fc;</i></a> <a class="SmallButton danger" onclick="preDeletePart('+pid.toString()+')"><i class="iconfont small-icon">&#xe699;</i></a>';
+    getPartInfo(pid);
 }
-function refreshThisCategory(){
+window.preDeletePart=function(pid){
+    p=confirm("确定要删除零件 #"+pid.toString()+"吗？");
+    if(!p){
+        return;
+    }
+    json={};
+    json.pid=pid;
+    jsonstr=JSON.stringify(json);
+    AJAXPostRequest("apis/deletePart.php",jsonstr,function(param=0){closeWindow();getpage(curpage);});
+}
+window.preModifyPart=function(pid){
+    remaining=document.getElementById("remaining").value;
+    nicname=document.getElementById("name").value;
+    selfId=document.getElementById("selfId").value;
+    value=document.getElementById("value").value;
+    barcode=document.getElementById("barcode").value;
+    // to json
+    json={};
+    json["pid"]=pid;
+    json["category"]=category;
+    json["remaining"]=remaining;
+    json["name"]=nicname;
+    json["selfId"]=selfId;
+    json["value"]=value;
+    json["barcode"]=barcode;
+    //json to string
+    jsonstr=JSON.stringify(json);
+    //send to server
+    AJAXPostRequest("apis/modifyPart.php",jsonstr,function(param=0){closeWindow();getpage(curpage);});
+}
+window.refreshThisCategory=function(){
     getpage(1);
 }
-function changeSorting(){
+window.changeSorting=function(){
     p=document.getElementById("sorting").selectedIndex;
     console.log(p);
     sortingby=p;
     refreshThisCategory();
 }
-function refreshSortingIcon(){
+window.refreshSortingIcon=function(){
     if(sorting=="ASC"){
         document.getElementById("sortingWay").innerHTML="&#xe7d1;";
     }else{
         document.getElementById("sortingWay").innerHTML="&#xe73c;";
     }
 }
-function changeSortingWay(){
+window.changeSortingWay=function(){
     if(sorting=="ASC"){
         sorting="DESC";
     }else{
@@ -197,7 +233,7 @@ function changeSortingWay(){
     refreshSortingIcon();
     refreshThisCategory();
 }
-function preNewCategory(){
+window.preNewCategory=function(){
     nam=document.getElementById("newCategoryInput").value;
     newCategory(nam);
 }
